@@ -39,20 +39,25 @@ char* Arena::AllocateFallback(size_t bytes) {
 
 char* Arena::AllocateAligned(size_t bytes) {
   const int align = (sizeof(void*) > 8) ? sizeof(void*) : 8;
+  // 指针大小最小为8
   static_assert((align & (align - 1)) == 0,
                 "Pointer size should be a power of 2");
+  // 指针大小应该为2的幂次方
   size_t current_mod = reinterpret_cast<uintptr_t>(alloc_ptr_) & (align - 1);
+  // 计算当前分配的地址模，因为align必定是2的幂次方-1在二进制表示就全是1，如 15是1111， 这个时候取and，那么就能算出要填补的字节数
   size_t slop = (current_mod == 0 ? 0 : align - current_mod);
   size_t needed = bytes + slop;
   char* result;
   if (needed <= alloc_bytes_remaining_) {
     result = alloc_ptr_ + slop;
+    // 指向下一次的地址
     alloc_ptr_ += needed;
     alloc_bytes_remaining_ -= needed;
   } else {
     // AllocateFallback always returned aligned memory
     result = AllocateFallback(bytes);
   }
+  // reinterpret_cast 一般用于 指针和指针的转换，指针的整数类型的转化，引用和引用之间的转化
   assert((reinterpret_cast<uintptr_t>(result) & (align - 1)) == 0);
   return result;
 }
