@@ -4,6 +4,7 @@
 2024/4/10 学习了atomic里的内存序，尤其知道了relax因为重排和没有内存屏障 所以性能会好一点。
 也学习了一写atomic的用法
 https://leetcode.cn/problems/print-in-order/
+
 https://leetcode.cn/problems/print-foobar-alternately/description/
 这两个可以练习一下对atmoic的掌握
 
