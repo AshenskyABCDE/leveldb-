@@ -7,7 +7,8 @@ https://leetcode.cn/problems/print-in-order/
 https://leetcode.cn/problems/print-foobar-alternately/description/
 这两个可以练习一下对atmoic的掌握
 
-阅读源码自然离不开四种类型转换，查阅资料之后发现转为枚举，还有两个类之间的转换是static_cast，基类和派生类之间的转换是dynamic_cast，const_cast是将一个const类型转化成非const类型，reinterpret_cast常用于指针之间的转换。
+阅读源码自然离不开四种类型转换，查阅资料之后发现转为枚举，还有两个类之间的转换是static_cast，dynamic_cast可以实现派生类转换为基类，也可以将多态下的基类指针转换为派生类，但是如果没有虚函数进行多态 基类转派生类会报错
+，const_cast是将一个const类型转化成非const类型，reinterpret_cast常用于指针之间的转换。
 ```cpp
   Code code() const {
     return (state_ == nullptr) ? kOk : static_cast<Code>(state_[4]);
