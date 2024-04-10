@@ -18,7 +18,9 @@
 
 #include "leveldb/export.h"
 #include "leveldb/slice.h"
-
+/*
+  记录leveldb里面的错误状态，返回错误码，详情看util/status.cpp的实现
+*/
 namespace leveldb {
 
 class LEVELDB_EXPORT Status {

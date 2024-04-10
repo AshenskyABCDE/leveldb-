@@ -35,6 +35,7 @@ class Arena {
   // by the arena.
   size_t MemoryUsage() const {
     return memory_usage_.load(std::memory_order_relaxed);
+    // 默认是 memory_order_seq_cst , relax性能比较好
   }
 
  private:
@@ -53,6 +54,7 @@ class Arena {
   // TODO(costan): This member is accessed via atomics, but the others are
   //               accessed without any locking. Is this OK?
   std::atomic<size_t> memory_usage_;
+  // atomic可以保证不收到竞态的干扰， 造成死锁
 };
 
 inline char* Arena::Allocate(size_t bytes) {

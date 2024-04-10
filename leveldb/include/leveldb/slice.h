@@ -22,6 +22,10 @@
 
 #include "leveldb/export.h"
 
+/*
+  功能就是将const char* 和 string转为slice，slice转为string的时候直接创建std::string(data_, size_); 因而减少了拷贝构造的开销
+  内置data_是const char*类型
+*/
 namespace leveldb {
 
 class LEVELDB_EXPORT Slice {
