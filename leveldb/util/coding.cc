@@ -20,6 +20,7 @@ void PutFixed64(std::string* dst, uint64_t value) {
 
 char* EncodeVarint32(char* dst, uint32_t v) {
   // Operate on characters as unsigneds
+  // 这里比较抽象，就是拿7位进行分段
   uint8_t* ptr = reinterpret_cast<uint8_t*>(dst);
   static const int B = 128;
   if (v < (1 << 7)) {
@@ -60,12 +61,14 @@ char* EncodeVarint64(char* dst, uint64_t v) {
     v >>= 7;
   }
   *(ptr++) = static_cast<uint8_t>(v);
+  //转成char* 类型
   return reinterpret_cast<char*>(ptr);
 }
 
 void PutVarint64(std::string* dst, uint64_t v) {
   char buf[10];
   char* ptr = EncodeVarint64(buf, v);
+  // 编码这里有一些抽象
   dst->append(buf, ptr - buf);
 }
 

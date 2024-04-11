@@ -2,7 +2,13 @@
 2024/4/9 学习了leveldb内存分配相关的原理，具体在util文件里的arena.cc和 arena.h 区别于常规的内存分配频繁调用影响性能，先分配一个4KB的内存，然后根据当前大小进行进一步分配，但似乎这样也会浪费一些内存？对于释放内存，不支持单独释放某个块，而是只能销毁整个arena
 
 2024/4/10 学习了atomic里的内存序，尤其知道了relax因为重排和没有内存屏障 所以性能会好一点。
-也学习了一写atomic的用法
+先推荐一些atomic的博客
+https://zhuanlan.zhihu.com/p/663652267
+
+https://www.cnblogs.com/kekec/p/14470150.html
+
+这里说一下我的理解，为了让内存顺序和代码顺序一样，设置了内存屏障，一般出现这个问题是由于CPU和编译器优化导致的。因此我们究竟想用什么顺序来访问，便有了六种内存序。其中release-acquire可以实现自旋锁这一操作。总而言之，C++ 并发编程中这些操作很常见，leveldb源码阅读的过程正好有见识到的机会。
+
 https://leetcode.cn/problems/print-in-order/
 
 https://leetcode.cn/problems/print-foobar-alternately/description/
@@ -20,3 +26,10 @@ https://leetcode.cn/problems/print-foobar-alternately/description/
   //    state_[0..3] == length of message
   //    state_[4]    == code
   //    state_[5..]  == message
+
+2024/4/11 阅读了coding编码部分，leveldb的编码对于整数类型可以分为定长编码和变长编码，可分为7位，如果沾满了 最高位填1
+比如说 0000111 1000100 1000000 可变成 (1)1000000 (1)1000100 (0)0000111
+这样可以节省空间使用
+对于字符串就会先记录一个长度编码，后面跟编码，比如说hello，长度为5，所以长度的编码是0x05
+最终编码就是 05 48 45 4C 4C 4F
+这样我们可以预先知道字符串的长度，存储大多数字符串都只要1字节
