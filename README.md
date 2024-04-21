@@ -41,3 +41,25 @@ Slice.h里面有一个
   Slice& operator=(const Slice&) = default;
 ```
 这里这个构造函数后面写default是什么意思呢？
+```cpp
+class Obj {
+public:
+  Obj(int x) : val(x) {} // 一旦定义了带参构造函数，就会不在产生默认构造函数
+
+private:
+  int val;
+};
+```
+这个时候 Obj A;就会报错 <br>
+随意default就是让这个默认构造函数存在 <br>
+正如下 <br>
+```cpp
+class Obj {
+public:
+  Obj(int x) : val(x) {} // 一旦定义了带参构造函数，就会不在产生默认构造函数
+  Obj() = deafult;
+
+private:
+  int val;
+};
+```
