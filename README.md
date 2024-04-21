@@ -33,3 +33,11 @@ https://leetcode.cn/problems/print-foobar-alternately/description/
 对于字符串就会先记录一个长度编码，后面跟编码，比如说hello，长度为5，所以长度的编码是0x05 <br>
 最终编码就是 05 48 45 4C 4C 4F <br>
 这样我们可以预先知道字符串的长度，存储大多数字符串都只要1字节 <br>
+
+2024/4/21 经历期中考试，暂时又可以回来研究源码了
+Slice.h里面有一个
+```cpp
+  Slice(const Slice&) = default;
+  Slice& operator=(const Slice&) = default;
+```
+这里这个构造函数后面写default是什么意思呢？

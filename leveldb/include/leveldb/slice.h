@@ -44,7 +44,7 @@ class LEVELDB_EXPORT Slice {
 
   // Intentionally copyable.
   Slice(const Slice&) = default;
-  Slice& operator=(const Slice&) = default;
+  Slice& operator=(const Slice&) = default; // 采用默认函数构造
 
   // Return a pointer to the beginning of the referenced data
   const char* data() const { return data_; }
