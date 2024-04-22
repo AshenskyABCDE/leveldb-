@@ -1,4 +1,5 @@
 ### leveldb源码阅读的学习笔记
+本人打算通过用日记笔记的形式来完成学习记录，并通过阅读leveldb源码学习C++知识以及存储相关的知识。
 2024/4/9 学习了leveldb内存分配相关的原理，具体在util文件里的arena.cc和 arena.h 区别于常规的内存分配频繁调用影响性能，先分配一个4KB的内存，然后根据当前大小进行进一步分配，但似乎这样也会浪费一些内存？对于释放内存，不支持单独释放某个块，而是只能销毁整个arena
 
 2024/4/10 学习了atomic里的内存序，尤其知道了relax因为重排和没有内存屏障 所以性能会好一点。
@@ -90,6 +91,57 @@ int main()
     cout<<B.print()<<endl;
     Obj C;
     Obj D(A);
+    cout<<D.print()<<endl;
+}
+```
+对象实例化、拷贝构造
+```cpp
+class Obj {
+public:
+    int print() const {
+        return val;
+    }
+    Obj(int x) : val(x) {
+        cout<<"A(int x)"<<endl;
+    }
+    Obj(const Obj  &A){// 拷贝构造函数
+        // 如果不是引用 这里传参相当于Obj tmp = A; 也就是Obj tmp(A)继续调用下去
+        // 上述例子也正好说明了为什么Obj X(A)也会调用构造函数，原因是里面会有一个Obj tmp = A;
+        cout<<"A(const Obj& A)"<<endl;
+        val = A.val;
+    }
+    Obj& operator=(const Obj &tmp) {
+        cout<<"Obj &operator=(const Obj &tmp)"<<endl;
+        val = tmp.val;
+        return *this;
+    }
+    //禁止实例化
+    //virtual void func1() = 0; 纯虚函数则可进制对类实例化
+    //也可将所有构造函数都放进private里，或者所有构造函数后面加delete()
+    void fun(Obj tmp){
+
+    }
+    Obj() = default;
+
+private:
+    int val;
+};
+
+int main()
+{
+
+    // 实例化三个过程：分配空间、初始化、赋值。
+    // 分配完内存，先进行基类的构造过程，然后分配虚函数指针，实例化列表，执行构造函数的函数体这一过程
+    const Obj A(2);//A(int x)
+    cout<<A.print()<<endl;
+    Obj B = A;//A(const Obj& A)
+    Obj B1(A);//A(const Obj& A)
+    cout<<B.print()<<endl;
+    Obj C;
+    C = A;//Obj &operator=(const Obj &tmp)
+    Obj C1 = A;//A(const Obj& A)
+    //上述不一样是以为C已经实例，不需要构造直接赋值即可，而C1没实例需要先构造
+    Obj D(A);//A(const Obj& A)
     cout<<D.print()<<endl;
 }
 ```
