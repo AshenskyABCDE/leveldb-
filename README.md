@@ -145,5 +145,6 @@ int main()
     cout<<D.print()<<endl;
 }
 ```
+如果要在const里面修改成员变量，需用mutable变量
 
 
