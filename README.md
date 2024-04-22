@@ -57,9 +57,41 @@ private:
 class Obj {
 public:
   Obj(int x) : val(x) {} // 一旦定义了带参构造函数，就会不在产生默认构造函数
-  Obj() = deafult;
+  Obj() = default;
 
 private:
   int val;
 };
 ```
+末尾加delete自然也就是禁用的意思，一般防止拷贝构造函数和移动构造函数
+
+还有末尾加const这是什么意思？
+```cpp
+class Obj {
+public:
+    Obj (int x) : val(x) {}
+    int print() const { // 可以试试把const取消再运行
+        return val;
+    }
+
+    Obj() = default;
+    //Obj(const Obj&) = delete;
+    //Obj& operator=(const Obj&) = delete;
+    //Obj& operator= delete;
+private:
+    int val;
+};
+
+int main()
+{
+    const Obj A(2);// 如果没有指定的const成员变量，就会编译报错，比如上面的print()函数后面没有 const
+    cout<<A.print()<<endl;
+    Obj B = A;
+    cout<<B.print()<<endl;
+    Obj C;
+    Obj D(A);
+    cout<<D.print()<<endl;
+}
+```
+
+
