@@ -148,3 +148,4 @@ int main()
 如果要在const里面修改成员变量，需用mutable变量
 
 
+2024/4/24 学习一下leveldb的log相关

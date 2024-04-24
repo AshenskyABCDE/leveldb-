@@ -31,6 +31,7 @@ namespace leveldb {
 class Slice;
 
 class LEVELDB_EXPORT WriteBatch {
+  // 批量写
  public:
   class LEVELDB_EXPORT Handler {
    public:
@@ -48,10 +49,12 @@ class LEVELDB_EXPORT WriteBatch {
   ~WriteBatch();
 
   // Store the mapping "key->value" in the database.
-  void Put(const Slice& key, const Slice& value);
+  
+  void Put(const Slice& key, const Slice& value); // 存储key和value信息
 
   // If the database contains a mapping for "key", erase it.  Else do nothing.
-  void Delete(const Slice& key);
+
+  void Delete(const Slice& key); // 追加删除key信息
 
   // Clear all updates buffered in this batch.
   void Clear();
@@ -60,17 +63,20 @@ class LEVELDB_EXPORT WriteBatch {
   //
   // This number is tied to implementation details, and may change across
   // releases. It is intended for LevelDB usage metrics.
-  size_t ApproximateSize() const;
+
+  size_t ApproximateSize() const; // 内存状态信息
 
   // Copies the operations in "source" to this batch.
   //
   // This runs in O(source size) time. However, the constant factor is better
   // than calling Iterate() over the source batch with a Handler that replicates
   // the operations into this batch.
-  void Append(const WriteBatch& source);
+
+  void Append(const WriteBatch& source); // 多个writebatch还可以继续合并
 
   // Support for iterating over the contents of a batch.
-  Status Iterate(Handler* handler) const;
+
+  Status Iterate(Handler* handler) const; // 遍历batch结构
 
  private:
   friend class WriteBatchInternal;

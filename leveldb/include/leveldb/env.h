@@ -54,6 +54,7 @@ class LEVELDB_EXPORT Env {
 
   Env(const Env&) = delete;
   Env& operator=(const Env&) = delete;
+  // 这里就是老生常谈的禁用拷贝函数
 
   virtual ~Env();
 
